@@ -1,7 +1,5 @@
 import pygame
-import math
 import random
-import time
 from flag import Flag
 from track import Track
 from car import Car
@@ -9,36 +7,30 @@ from ui import UIclass
 
 # Initialize Pygame
 pygame.init()
-clock = pygame.time.Clock()
 
-class Game:
-    def __init__(self, screen_width = 800, screen_height = 600):
+class Level:
+    def __init__(self, seed, screen_width=800, screen_height=600):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
         self.running = True
-
-        self.track = Track(self, 10, 100, 50, 17001)
+        self.track = Track(self, 10, 100, 50, seed)
         self.car = Car(self)
         self.font = pygame.font.Font(None, 24)
         self.ui = UIclass(self, self.font, self.screen)
-        self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Car AI")
-        
+        self.winstate = False
 
     def reset(self, win=False):
         self.car = Car(self)
-        if win == True:
+        if win:
             self.ui.attempt = 0
             self.ui.score += 1
-            seed = random.randint(0, 1000)
-            self.track = Track(self, 10, 100, 50, seed)
-            self.ui.seed = seed
+            self.running = False
+            self.winstate = True
         else:
             self.ui.attempt += 1
-
-
 
     def update(self):
         for event in pygame.event.get():
@@ -57,7 +49,16 @@ class Game:
     def run(self):
         while self.running:
             self.update()
+        return self.winstate
         pygame.quit()
+
+class Game:
+    def __init__(self):
+        pass
+
+    def run(self):
+        level = Level(random.randint(0, 1000))
+        level.run()
 
 # In the main script
 game = Game()
