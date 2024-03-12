@@ -1,6 +1,6 @@
 import pygame
 class Flag:
-    def __init__(self,game, x, y, size):
+    def __init__(self,game, x, y, size=10):
         self.x = x
         self.y = y
         self.size = size

@@ -79,11 +79,10 @@ class Car:
         return distances
 
     def check_collision(self, screen):
-        global game
         distances = self.raytrace(screen, (0, 0, 255, 255))  # Raytrace for blue color
         if distances == [0, 0, 0, 0, 0, 0]:  # If the car is touching the flag
-            game.reset(win = True)
+            self.game.reset(win = True)
         else:
             distances = self.raytrace(screen)  # Raytrace for black color
             if distances == [0, 0, 0, 0, 0, 0]:  # If the car is stuck
-                game.reset(win = False)
+                self.game.reset(win = False)

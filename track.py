@@ -28,7 +28,7 @@ class Track:
             next_position = position + direction * self.segment_length
 
             # Check if the next position is within the screen boundaries
-            if next_position.x < 0 or next_position.x > self.screen_width or next_position.y < 0 or next_position.y > self.screen_height:
+            if next_position.x < 0 or next_position.x > self.game.screen_width or next_position.y < 0 or next_position.y > self.game.screen_height:
                 # If the next position is outside the screen boundaries, reverse the direction
                 direction = -direction
                 next_position = position + direction * self.segment_length
@@ -77,7 +77,7 @@ class Track:
                             flag_position = pygame.math.Vector2(gray_position) + perp_direction * (self.track_width / 4)
                             # Round the flag position to the nearest grid point
                             grid_flag_position = pygame.math.Vector2(round(flag_position.x / grid_size) * grid_size, round(flag_position.y / grid_size) * grid_size)
-                            self.flag = Flag(grid_flag_position.x, grid_flag_position.y, 10)  # Set the flag to a new Flag instance
+                            self.flag = Flag(self.game, grid_flag_position.x, grid_flag_position.y)  # Set the flag to a new Flag instance
                     break
 
     def draw(self):

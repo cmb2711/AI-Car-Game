@@ -13,24 +13,27 @@ clock = pygame.time.Clock()
 
 class Game:
     def __init__(self, screen_width = 800, screen_height = 600):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.track = Track(10, 100, 50, screen_width, screen_height, 17001)
+        self.track = Track(self, 10, 100, 50, 17001)
         self.car = Car(self)
         self.font = pygame.font.Font(None, 24)
-        self.ui = UIclass(self.font, self.screen)
+        self.ui = UIclass(self, self.font, self.screen)
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Car AI")
+        
 
     def reset(self, win=False):
-        self.car = Car()
+        self.car = Car(self)
         if win == True:
             self.ui.attempt = 0
             self.ui.score += 1
             seed = random.randint(0, 1000)
-            self.track = Track(10, 100, 50, self.screen_width, self.screen_height, seed)
+            self.track = Track(self, 10, 100, 50, seed)
             self.ui.seed = seed
         else:
             self.ui.attempt += 1

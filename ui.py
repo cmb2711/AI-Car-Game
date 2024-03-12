@@ -1,7 +1,8 @@
 import pygame
 
 class UIclass:
-    def __init__(self, font, screen):
+    def __init__(self, game, font, screen):
+        self.game = game
         self.font = font
         self.screen = screen
         self.start_time = pygame.time.get_ticks()  # Store the start time
@@ -10,6 +11,8 @@ class UIclass:
         self.attempt = 0
 
     def draw(self):
+        self.seed = self.game.track.seed
+
         elapsed_time = (pygame.time.get_ticks() - self.start_time) / 1000  # Calculate the elapsed time in seconds
         time_text = self.font.render(f'Time: {elapsed_time:.2f}', True, (255, 255, 255), (0, 0, 0))
         seed_text = self.font.render(f'Seed: {self.seed}', True, (255, 255, 255), (0, 0, 0))
