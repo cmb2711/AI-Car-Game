@@ -1,14 +1,14 @@
 import pygame
 import random
 import math
-from main import screen_width, screen_height, screen
 class Car:
-    def __init__(self, x=screen_width / 2, y=screen_height / 2, angle=0, width = 3, height = 6, color = (255, 0, 0)):
-        self.start_x = x
-        self.start_y = y
+    def __init__(self, game, angle=0, width = 3, height = 6, color = (255, 0, 0)):
+        self.game=game
+        self.x = game.screen_width / 2
+        self.y = game.screen_height / 2
+        self.start_x = self.x
+        self.start_y = self.y
         self.start_angle = angle
-        self.x = x
-        self.y = y
         self.angle = angle
         self.width = width
         self.height = height
@@ -27,7 +27,7 @@ class Car:
         # Set the center of the rectangle to the car's position
         rotated_rect.center = (self.x, self.y)
         # Draw the rotated surface on the screen
-        screen.blit(rotated_surface, rotated_rect)
+        self.game.screen.blit(rotated_surface, rotated_rect)
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:

@@ -1,15 +1,13 @@
 import pygame
 import random
 from flag import Flag
-from main import screen_width, screen_height, screen
 
 class Track:
-    def __init__(self, segments, segment_length, track_width, screen_width, screen_height, seed):
+    def __init__(self, game, segments, segment_length, track_width, seed):
         self.segments = segments
         self.segment_length = segment_length
         self.track_width = track_width
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+        self.game=game
         self.seed = seed
         random.seed(self.seed)
         self.flag = None  # Initialize the flag as None
@@ -19,7 +17,7 @@ class Track:
         self.track = []
         self.gray_track = []  # Store the positions of the gray track segments
         direction = pygame.math.Vector2(1, 0)
-        center = pygame.math.Vector2(self.screen_width / 2, self.screen_height / 2)
+        center = pygame.math.Vector2(self.game.screen_width / 2, self.game.screen_height / 2)
         position = center  # Start from the center of the screen
         max_distance = 0  # Initialize the maximum distance as 0
         grid_size = self.track_width  # Set the grid size to be the same as the track width
@@ -92,7 +90,7 @@ class Track:
         for i in range(len(self.track) - 1):
             start = pygame.math.Vector2(self.track[i])
             end = pygame.math.Vector2(self.track[i + 1])
-            draw_adjusted_line(screen, (0, 0, 0), start, end, self.track_width)  # Black border
+            draw_adjusted_line(self.game.screen, (0, 0, 0), start, end, self.track_width)  # Black border
 
         # Draw all the grey lines
         for i in range(len(self.track) - 1):
@@ -100,6 +98,6 @@ class Track:
             end = pygame.math.Vector2(self.track[i + 1])
             direction = (end - start).normalize()
             offset = 0  # Adjust this value to change the length of the offset
-            draw_adjusted_line(screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
+            draw_adjusted_line(self.game.screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
 
         self.flag.draw()  # Draw the flag
