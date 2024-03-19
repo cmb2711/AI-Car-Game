@@ -2,10 +2,10 @@ import pygame
 import random
 import math
 class Car:
-    def __init__(self, game, angle=0, width = 3, height = 6, color = (255, 0, 0)):
-        self.game=game
-        self.x = game.screen_width / 2
-        self.y = game.screen_height / 2
+    def __init__(self, level, angle=0, width = 3, height = 6, color = (255, 0, 0)):
+        self.level=level
+        self.x = level.game.screen_width / 2
+        self.y = level.game.screen_height / 2
         self.start_x = self.x
         self.start_y = self.y
         self.start_angle = angle
@@ -27,7 +27,7 @@ class Car:
         # Set the center of the rectangle to the car's position
         rotated_rect.center = (self.x, self.y)
         # Draw the rotated surface on the screen
-        self.game.screen.blit(rotated_surface, rotated_rect)
+        self.level.game.screen.blit(rotated_surface, rotated_rect)
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
@@ -56,7 +56,7 @@ class Car:
         self.y += self.speed * math.sin(math.radians(self.angle))
         self.draw()
 
-    def raytrace(self, screen, trace_color=(0, 0, 0, 255), distance=100):
+    def raytrace(self, trace_color=(0, 0, 0, 255), distance=100):
         directions = [-180, -90, -45, 0, 45, 90]  # Back, left, front left, front, front right, right
         distances = []
 
@@ -65,8 +65,8 @@ class Car:
                 x = int(self.x + d * math.cos(math.radians(self.angle + direction)))
                 y = int(self.y + d * math.sin(math.radians(self.angle + direction)))
 
-                if 0 <= x < screen.get_width() and 0 <= y < screen.get_height():
-                    color = screen.get_at((x, y))
+                if 0 <= x < self.level.game.screen.get_width() and 0 <= y < self.level.game.screen.get_height():
+                    color = self.level.game.screen.get_at((x, y))
                     if color == trace_color:  # If the pixel is the color we're tracing
                         distances.append(d)
                         break
@@ -78,11 +78,11 @@ class Car:
 
         return distances
 
-    def check_collision(self, screen):
-        distances = self.raytrace(screen, (0, 0, 255, 255))  # Raytrace for blue color
+    def check_collision(self):
+        distances = self.raytrace((0, 0, 255, 255))  # Raytrace for blue color
         if distances == [0, 0, 0, 0, 0, 0]:  # If the car is touching the flag
-            self.game.reset(win = True)
+            self.level.reset(win = True)
         else:
-            distances = self.raytrace(screen)  # Raytrace for black color
+            distances = self.raytrace()  # Raytrace for black color
             if distances == [0, 0, 0, 0, 0, 0]:  # If the car is stuck
-                self.game.reset(win = False)
+                self.level.reset(win = False)

@@ -3,11 +3,11 @@ import random
 from flag import Flag
 
 class Track:
-    def __init__(self, game, segments, segment_length, track_width, seed):
+    def __init__(self, level, segments, segment_length, track_width, seed):
         self.segments = segments
         self.segment_length = segment_length
         self.track_width = track_width
-        self.game=game
+        self.level=level
         self.seed = seed
         random.seed(self.seed)
         self.flag = None  # Initialize the flag as None
@@ -17,7 +17,7 @@ class Track:
         self.track = []
         self.gray_track = []  # Store the positions of the gray track segments
         direction = pygame.math.Vector2(1, 0)
-        center = pygame.math.Vector2(self.game.screen_width / 2, self.game.screen_height / 2)
+        center = pygame.math.Vector2(self.level.game.screen_width / 2, self.level.game.screen_height / 2)
         position = center  # Start from the center of the screen
         max_distance = 0  # Initialize the maximum distance as 0
         grid_size = self.track_width  # Set the grid size to be the same as the track width
@@ -28,7 +28,7 @@ class Track:
             next_position = position + direction * self.segment_length
 
             # Check if the next position is within the screen boundaries
-            if next_position.x < 0 or next_position.x > self.game.screen_width or next_position.y < 0 or next_position.y > self.game.screen_height:
+            if next_position.x < 0 or next_position.x > self.level.game.screen_width or next_position.y < 0 or next_position.y > self.level.game.screen_height:
                 # If the next position is outside the screen boundaries, reverse the direction
                 direction = -direction
                 next_position = position + direction * self.segment_length
@@ -77,7 +77,7 @@ class Track:
                             flag_position = pygame.math.Vector2(gray_position) + perp_direction * (self.track_width / 4)
                             # Round the flag position to the nearest grid point
                             grid_flag_position = pygame.math.Vector2(round(flag_position.x / grid_size) * grid_size, round(flag_position.y / grid_size) * grid_size)
-                            self.flag = Flag(self.game, grid_flag_position.x, grid_flag_position.y)  # Set the flag to a new Flag instance
+                            self.flag = Flag(self.level, grid_flag_position.x, grid_flag_position.y)  # Set the flag to a new Flag instance
                     break
 
     def draw(self):
@@ -90,7 +90,7 @@ class Track:
         for i in range(len(self.track) - 1):
             start = pygame.math.Vector2(self.track[i])
             end = pygame.math.Vector2(self.track[i + 1])
-            draw_adjusted_line(self.game.screen, (0, 0, 0), start, end, self.track_width)  # Black border
+            draw_adjusted_line(self.level.game.screen, (0, 0, 0), start, end, self.track_width)  # Black border
 
         # Draw all the grey lines
         for i in range(len(self.track) - 1):
@@ -98,6 +98,6 @@ class Track:
             end = pygame.math.Vector2(self.track[i + 1])
             direction = (end - start).normalize()
             offset = 0  # Adjust this value to change the length of the offset
-            draw_adjusted_line(self.game.screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
+            draw_adjusted_line(self.level.game.screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
 
         self.flag.draw()  # Draw the flag
