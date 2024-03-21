@@ -28,18 +28,27 @@ class Car:
         rotated_rect.center = (self.x, self.y)
         # Draw the rotated surface on the screen
         self.level.game.screen.blit(rotated_surface, rotated_rect)
-    def update(self):
+    def get_keys_as_array(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        return [
+            keys[pygame.K_LEFT],
+            keys[pygame.K_RIGHT],
+            keys[pygame.K_UP],
+            keys[pygame.K_DOWN]
+        ]
+    def update(self, keys=None):
+        if keys is None:
+            keys = self.get_keys_as_array()
+        if keys[0]:
             if self.dtheta > -5:
                 self.dtheta -= .1
-        if keys[pygame.K_RIGHT]:
+        if keys[1]:
             if self.dtheta <5:
                 self.dtheta += .1
-        if keys[pygame.K_UP]:
+        if keys[2]:
             if self.speed < 1:
                 self.speed += 0.01
-        elif keys[pygame.K_DOWN]:
+        elif keys[3]:
             if self.speed > -1:
                 self.speed -= 0.01
         if self.speed > 0:
