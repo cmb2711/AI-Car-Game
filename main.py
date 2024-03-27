@@ -25,6 +25,7 @@ class Game:
                 self.run_seed(int(seed))
 
     def run_endless(self):
+        self.frame_iteration = 0
         pygame.init()
         self.running = True
         self.level = Level(self, random.randint(0, 1000))
@@ -34,16 +35,18 @@ class Game:
                     self.running = False
                     pygame.quit()
                     return
-            winstate = self.level.update()
+            winstate, reward = self.level.update()
+            self.frame_iteration += 1
             self.ui.draw()
             pygame.display.flip()  # Update the display
             self.clock.tick(60)
             if winstate == None:
                 pass
-            elif winstate == True:
+            elif winstate == True or self.frame_iteration > 100:
                 self.level = Level(self, random.randint(0, 1000))
 
     def run_seed(self, seed):
+        self.frame_iteration = 0
         pygame.init()
         self.running = True
         self.level = Level(self, seed)
@@ -53,13 +56,14 @@ class Game:
                     self.running = False
                     pygame.quit()
                     sys.exit()  # End the program
-            winstate = self.level.update()
+            winstate, reward = self.level.update()
+            self.frame_iteration += 1
             self.ui.draw()
             pygame.display.flip()  # Update the display
             self.clock.tick(60)
             if winstate == None:
                 pass
-            elif winstate == True:
+            elif winstate == True or self.frame_iteration > 100:
                 self.running = False
                 pygame.quit()
                 sys.exit()  # End the program

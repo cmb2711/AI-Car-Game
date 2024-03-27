@@ -23,10 +23,13 @@ class Level:
             self.game.ui.score += 1
             self.end_level_if_false = False
             self.winstate = True
+            reward += 10
         else:
             self.game.ui.attempt += 1
+            reward = -10
 
     def update(self):
+        self.reward = 0
         if self.end_level_if_false != False:   
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -37,6 +40,6 @@ class Level:
             self.car.check_collision()
             self.track.draw()
             self.car.update()
-            return None
+            return None, self.reward
         else:
-            return self.winstate
+            return self.winstate, self.reward
