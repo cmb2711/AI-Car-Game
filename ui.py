@@ -9,6 +9,7 @@ class UIclass:
         self.seed = 0
         self.score = 0
         self.attempt = 0
+        self.frame_iteration = 0
 
     def draw(self):
         self.seed = self.game.level.track.seed
@@ -18,8 +19,10 @@ class UIclass:
         seed_text = self.font.render(f'Seed: {self.seed}', True, (255, 255, 255), (0, 0, 0))
         score_text = self.font.render(f'Score: {self.score}', True, (255, 255, 255), (0, 0, 0))
         attempt_text = self.font.render(f'Attempt: {self.attempt}', True, (255, 255, 255), (0, 0, 0))
+        iteration_text = self.font.render(f'Iteration: {self.game.frame_iteration}', True, (255, 255, 255), (0, 0, 0))
 
         self.screen.blit(time_text, (10, 10))
         self.screen.blit(seed_text, (10, 40))
         self.screen.blit(score_text, (10, 70))
         self.screen.blit(attempt_text, (10, 100))
+        self.screen.blit(iteration_text, (10, 130))

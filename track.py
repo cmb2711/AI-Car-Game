@@ -83,8 +83,9 @@ class Track:
     def draw(self):
         def draw_adjusted_line(screen, color, start, end, width):
             direction = pygame.math.Vector2(end) - pygame.math.Vector2(start)
-            direction = direction.normalize() * (width // 2)
-            pygame.draw.line(screen, color, start - direction, end + direction, width)
+            if direction.length() > 0:  # Check if the direction vector has a non-zero length
+                direction = direction.normalize() * (width // 2)
+                pygame.draw.line(screen, color, start - direction, end + direction, width)
 
         # Draw all the black lines
         for i in range(len(self.track) - 1):
@@ -96,8 +97,9 @@ class Track:
         for i in range(len(self.track) - 1):
             start = pygame.math.Vector2(self.track[i])
             end = pygame.math.Vector2(self.track[i + 1])
-            direction = (end - start).normalize()
-            offset = 0  # Adjust this value to change the length of the offset
-            draw_adjusted_line(self.level.game.screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
+            if start != end:  # Check if start and end are not the same
+                direction = (end - start).normalize()
+                offset = 0  # Adjust this value to change the length of the offset
+                draw_adjusted_line(self.level.game.screen, (128, 128, 128), start, end + direction * offset, self.track_width - 2)  # Grey interior
 
         self.flag.draw()  # Draw the flag
